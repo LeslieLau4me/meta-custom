@@ -11,4 +11,4 @@ git clone 仓库地址 meta-custom
 打开conf/bblayers.conf
 在BBLAYERS变量末尾追加：
 ${BSPDIR}/sources/meta-custom \
-4. 编译镜像即可使用
+4. 配置环境编译镜像即可使用 bitbake myir-image-emmc-nqt 
