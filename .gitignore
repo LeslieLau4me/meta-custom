@@ -1,0 +1,15 @@
+*.pyc
+*.pyo
+*.o
+*.so
+*.a
+*.d
+*.orig
+*.rej
+*.swp
+*~
+.bbdo_build
+.tmp-*
+work/
+temp/
+build/

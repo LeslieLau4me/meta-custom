@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure routes after network is online
+After=systemd-networkd.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/network-config.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
