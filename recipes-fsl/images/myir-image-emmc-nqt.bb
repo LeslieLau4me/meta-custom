@@ -47,34 +47,39 @@ IMAGE_LINGUAS = "en-us"
 
 IMAGE_OVERHEAD_FACTOR = "1.0"
 
-
-# IMAGE_FSTYPES = "ext4.gz"
 IMAGE_FSTYPES += "wic wic.zst"
 IMAGE_ROOTFS_SIZE = "819200"
 
 NETWORK_FILES_SRC := "${THISDIR}/files/systemd"
 
 copy_systemd_network_configs() {
-    # 需要手动创建的目录
     install -d ${IMAGE_ROOTFS}/usr/local/bin
 
-    # 复制网络配置文件
     cp -f ${NETWORK_FILES_SRC}/10-eth0.network      ${IMAGE_ROOTFS}/etc/systemd/network/
     cp -f ${NETWORK_FILES_SRC}/11-eth0-dhcp.network  ${IMAGE_ROOTFS}/etc/systemd/network/
 
-    # 复制脚本到标准路径
     cp -f ${NETWORK_FILES_SRC}/set_static_ip.sh      ${IMAGE_ROOTFS}/usr/local/bin/
     cp -f ${NETWORK_FILES_SRC}/set_dhcp.sh           ${IMAGE_ROOTFS}/usr/local/bin/
     cp -f ${NETWORK_FILES_SRC}/network-config.sh     ${IMAGE_ROOTFS}/usr/local/bin/
 
-    # systemd服务
     cp -f ${NETWORK_FILES_SRC}/network-config.service ${IMAGE_ROOTFS}/etc/systemd/system/
 
-    # 执行权限
     chmod 755 ${IMAGE_ROOTFS}/usr/local/bin/*.sh
 
-    # 启用开机自启
     systemctl --root=${IMAGE_ROOTFS} enable network-config.service
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "copy_systemd_network_configs;"
+# 添加自定义 fstab 和目录
+add_custom_fstab() {
+    install -d ${IMAGE_ROOTFS}/mnt/data_bak
+    cat >>${IMAGE_ROOTFS}/etc/fstab <<EOF
+/dev/mmcblk0p3  /mnt/data_bak  ext4  defaults,nofail  0  0
+/dev/mmcblk0p4  /var/log       ext4  defaults,nofail  0  0
+EOF
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "add_custom_fstab; copy_systemd_network_configs;"
+
+# 使用自定义 WKS 文件
+WKS_FILE = "imx93-custom.wks.in"
+WKS_SEARCH_PATH:prepend = "${THISDIR}/../../wic:"

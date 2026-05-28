@@ -1,0 +1,31 @@
+# short-description: Custom partition layout with boot, rootfs, data_bak and log partitions
+# long-description:
+# Disk layout used:
+#  - ---------- -------------- --------------
+# | | imx-boot |     boot     |    rootfs    |
+#  - ---------- -------------- --------------
+# ^ ^          ^              ^              ^
+# | |          |              |              |
+# 0 |        8MiB          264MiB         264MiB + rootfs
+#   ${IMX_BOOT_SEEK} (32 or 33kiB)
+#
+# Additional partitions:
+#  - data_bak (32MiB)
+#  - log (32MiB)
+
+# u-boot 分区（无分区表，直接写入，必须保留）
+part u-boot --source rawcopy --sourceparams="file=imx-boot.tagged" --ondisk mmcblk --no-table --align ${IMX_BOOT_SEEK}
+
+# boot 分区（vfat格式，必须有）
+part /boot --source bootimg-partition --ondisk mmcblk --fstype=vfat --label boot --active --align 8192 --fixed-size 256
+
+# rootfs 分区（ext4格式）
+part / --source rootfs --ondisk mmcblk --fstype=ext4 --label root --align 8192
+
+# data_bak 分区（ext4格式，固定大小）
+part --ondisk mmcblk --fstype=ext4 --label data_bak --size 32M --align 8192
+
+# log 分区（ext4格式，固定大小）
+part --ondisk mmcblk --fstype=ext4 --label log --size 32M --align 8192
+
+bootloader --ptable msdos
