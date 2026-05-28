@@ -1,14 +1,19 @@
-SUMMARY = "Realtek HCI Attach for Bluetooth"
+SUMMARY = "Quectel/Realtek HCI Attach for Bluetooth"
 LICENSE = "CLOSED"
-LIC_FILES_CHKSUM = ""
 
-SRC_URI = "file://rtk_hciattach"
+SRC_URI = "git://git@192.168.1.10:8822/dcu/quectel-hciattach.git;protocol=ssh;branch=yocto-fix"
 
-S = "${WORKDIR}/rtk_hciattach"
+# 可选：指定 patch 的搜索路径
+# FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+S = "${WORKDIR}/git"
+SRCREV = "${AUTOREV}"
 
-EXTRA_OEMAKE = ""
-
+# 关键是设置 CROSS_COMPILE 环境变量
 do_compile() {
+    cd ${S}
+    
+    # 设置 CROSS_COMPILE 变量并编译
+    export CROSS_COMPILE="${TARGET_PREFIX}"
     oe_runmake CC="${CC}" CFLAGS="${CFLAGS}"
 }
 
