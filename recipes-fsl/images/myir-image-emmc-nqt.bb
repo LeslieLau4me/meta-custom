@@ -38,6 +38,7 @@ IMAGE_INSTALL:append = " \
     redis \
     redis-plus-plus \
     jq \
+    dbuswrap \
 "
 
 IMAGE_INSTALL += "rtk-hciattach"
