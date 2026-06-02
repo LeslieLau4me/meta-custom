@@ -39,9 +39,11 @@ IMAGE_INSTALL:append = " \
     redis-plus-plus \
     jq \
     dbuswrap \
+    rtk-hciattach \
+    lighttpd \
+    php-cgi \
+    php-fpm \
 "
-
-IMAGE_INSTALL += "rtk-hciattach"
 
 IMAGE_FEATURES:remove = "dev-pkgs staticdev-pkgs doc-pkgs man-pkgs locale-pkgs debug-tweaks"
 IMAGE_LINGUAS = "en-us"
@@ -50,6 +52,9 @@ IMAGE_OVERHEAD_FACTOR = "1.0"
 
 IMAGE_FSTYPES += "wic wic.zst"
 IMAGE_ROOTFS_SIZE = "819200"
+
+# 开机自启动 lighttpd
+SYSTEMD_AUTO_ENABLE:pn-php-fpm = "enable"
 
 NETWORK_FILES_SRC := "${THISDIR}/files/systemd"
 
