@@ -1,5 +1,6 @@
 require recipes-fsl/images/myir-image-emmc.bb
 
+# 移除不需要的包
 IMAGE_INSTALL:remove = " \
     packagegroup-qt6-imx \
     qtbase qtdeclarative qttools \
@@ -17,15 +18,10 @@ IMAGE_INSTALL:remove = " \
     tslib-tests \
     myir-lvgl \
     packagegroup-imx-ml \
-"
-
-IMAGE_INSTALL:remove = " \
     tools-testapps \
     tools-profile \
     serialcheck \
     libdrm-tests \
-    tslib tslib-calibrate tslib-conf tslib-tests \
-    myir-lvgl \
     alsa-utils \
     auto-wifi \
     myir-test-function \
@@ -34,6 +30,7 @@ IMAGE_INSTALL:remove = " \
     multimedia \
 "
 
+# 添加需要的包（注意：不要包含 custom-fstab）
 IMAGE_INSTALL:append = " \
     redis \
     redis-plus-plus \
@@ -43,37 +40,22 @@ IMAGE_INSTALL:append = " \
     lighttpd \
     php-cgi \
     php-fpm \
+    network-config \
 "
 
+# 镜像配置
 IMAGE_FEATURES:remove = "dev-pkgs staticdev-pkgs doc-pkgs man-pkgs locale-pkgs debug-tweaks"
 IMAGE_LINGUAS = "en-us"
-
 IMAGE_OVERHEAD_FACTOR = "1.0"
-
 IMAGE_FSTYPES += "wic wic.zst"
 IMAGE_ROOTFS_SIZE = "819200"
 
 # 开机自启动 lighttpd
 SYSTEMD_AUTO_ENABLE:pn-php-fpm = "enable"
 
-NETWORK_FILES_SRC := "${THISDIR}/files/systemd"
-
-copy_systemd_network_configs() {
-    install -d ${IMAGE_ROOTFS}/usr/local/bin
-
-    cp -f ${NETWORK_FILES_SRC}/10-eth0.network      ${IMAGE_ROOTFS}/etc/systemd/network/
-    cp -f ${NETWORK_FILES_SRC}/11-eth0-dhcp.network  ${IMAGE_ROOTFS}/etc/systemd/network/
-
-    cp -f ${NETWORK_FILES_SRC}/set_static_ip.sh      ${IMAGE_ROOTFS}/usr/local/bin/
-    cp -f ${NETWORK_FILES_SRC}/set_dhcp.sh           ${IMAGE_ROOTFS}/usr/local/bin/
-    cp -f ${NETWORK_FILES_SRC}/network-config.sh     ${IMAGE_ROOTFS}/usr/local/bin/
-
-    cp -f ${NETWORK_FILES_SRC}/network-config.service ${IMAGE_ROOTFS}/etc/systemd/system/
-
-    chmod 755 ${IMAGE_ROOTFS}/usr/local/bin/*.sh
-
-    systemctl --root=${IMAGE_ROOTFS} enable network-config.service
-}
+# 使用自定义 WKS 文件
+WKS_FILE = "imx93-custom.wks.in"
+WKS_SEARCH_PATH:prepend = "${THISDIR}/../../wic:"
 
 # 添加自定义 fstab 和目录
 add_custom_fstab() {
@@ -84,8 +66,4 @@ add_custom_fstab() {
 EOF
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "add_custom_fstab; copy_systemd_network_configs;"
-
-# 使用自定义 WKS 文件
-WKS_FILE = "imx93-custom.wks.in"
-WKS_SEARCH_PATH:prepend = "${THISDIR}/../../wic:"
+ROOTFS_POSTPROCESS_COMMAND += "add_custom_fstab;"
