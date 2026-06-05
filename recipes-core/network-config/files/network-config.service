@@ -1,15 +1,15 @@
 [Unit]
-Description=Configure routes after network is online
-After=network-online.target
-Wants=network-online.target
-Before=network.target
+Description=Generate systemd-networkd configuration from JSON
+After=local-fs.target
+Before=systemd-networkd.service systemd-networkd.socket
+Wants=systemd-networkd.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/network-config.sh
+ExecStart=/usr/bin/network-config.sh /etc/network_conf.json /etc/systemd/network
 RemainAfterExit=yes
 StandardOutput=journal
 StandardError=journal
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=sysinit.target
