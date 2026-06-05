@@ -30,7 +30,7 @@ IMAGE_INSTALL:remove = " \
     multimedia \
 "
 
-# 添加需要的包（注意：不要包含 custom-fstab）
+# 添加需要的包
 IMAGE_INSTALL:append = " \
     redis \
     redis-plus-plus \
@@ -41,6 +41,7 @@ IMAGE_INSTALL:append = " \
     php-cgi \
     php-fpm \
     network-config \
+    sntp \
 "
 
 # 镜像配置
