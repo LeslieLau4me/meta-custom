@@ -1,11 +1,11 @@
 # redis_%.bbappend
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
-SRC_URI:remove = "http://download.redis.io/releases/${BP}.tar.gz"
-SRC_URI:append = " file://${DL_DIR}/redis-7.2.8.tar.gz"
+# SRC_URI:remove = "http://download.redis.io/releases/${BP}.tar.gz"
+# SRC_URI:append = " file://${DL_DIR}/redis-7.2.8.tar.gz"
 
 SRC_URI:append = " file://redis.conf"
 
-SRC_URI[sha256sum] = "66edcb676acf0f611e1cd8d69aa294c0256cb1658094c73bad529d1546eb89ac"
+# SRC_URI[sha256sum] = "66edcb676acf0f611e1cd8d69aa294c0256cb1658094c73bad529d1546eb89ac"
 
 # 确保使用正确的 S 路径
 S = "${WORKDIR}/redis-${PV}"
