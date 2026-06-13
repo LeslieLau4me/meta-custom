@@ -1,7 +1,8 @@
 SUMMARY = "Quectel/Realtek HCI Attach for Bluetooth"
 LICENSE = "CLOSED"
 
-SRC_URI = "git://git@192.168.1.10:8822/dcu/quectel-hciattach.git;protocol=ssh;branch=yocto-fix"
+#SRC_URI = "git://git@192.168.1.156:8989/com_rd/dcu_rd/os/i.mx9/quectel-hciattach.git;protocol=ssh;branch=yocto-fix"
+SRC_URI = "git://git@192.168.1.156/com_rd/dcu_rd/os/i.mx9/quectel-hciattach.git;protocol=ssh;branch=yocto-fix"
 
 # 可选：指定 patch 的搜索路径
 # FILESEXTRAPATHS:prepend := "${THISDIR}/files:"

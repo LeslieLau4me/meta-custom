@@ -12,7 +12,7 @@ SRC_URI = " \
 "
 
 inherit systemd
-
+S = "${UNPACKDIR}"
 # No upstream source tree; use WORKDIR directly for unpacked recipe assets
 
 SYSTEMD_SERVICE:${PN} = "network-config.service"

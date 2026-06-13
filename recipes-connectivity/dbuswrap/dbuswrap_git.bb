@@ -2,7 +2,8 @@ SUMMARY = "DBus Wrapper Library"
 DESCRIPTION = "A C library wrapper for DBus asynchronous functionality"
 LICENSE = "CLOSED"
 
-SRC_URI = "git://git@192.168.1.10:8822/dcu/dbuswrap_c.git;protocol=ssh;branch=main"
+#SRC_URI = "git://git@192.168.1.156:8989/com_rd/dcu_rd/apps/dbuswrap_c.git;protocol=ssh;branch=main"
+SRC_URI = "git://git@192.168.1.156/com_rd/dcu_rd/apps/dbuswrap_c.git;protocol=ssh;branch=main"
 
 S = "${WORKDIR}/git"
 

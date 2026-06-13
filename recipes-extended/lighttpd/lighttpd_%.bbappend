@@ -2,7 +2,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += " \
     file://lighttpd.conf \
-    git://git@192.168.1.10:8822/webserver/html.git;protocol=ssh;branch=feature-yocto-custom;destsuffix=html \
+    git://git@192.168.1.156/com_rd/dcu_rd/apps/webserver/html.git;protocol=ssh;branch=feature-yocto-custom;destsuffix=html \
 "
 SRCREV = "${AUTOREV}"
 
